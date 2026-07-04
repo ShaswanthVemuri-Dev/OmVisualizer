@@ -1,0 +1,62 @@
+name: Restructure uploaded app
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  clean-root:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract uploaded project and clean repo root
+        run: |
+          set -euo pipefail
+          ZIP_PATH="om-cymatics-visualizer.zip"
+          if [ ! -f "$ZIP_PATH" ]; then
+            ZIP_PATH="OmVisualizer-Vercel-root.zip"
+          fi
+          if [ ! -f "$ZIP_PATH" ]; then
+            echo "No uploaded project ZIP found."
+            exit 1
+          fi
+
+          rm -rf /tmp/om-visualizer-src
+          mkdir -p /tmp/om-visualizer-src
+          unzip -q "$ZIP_PATH" -d /tmp/om-visualizer-src
+
+          PROJECT_PACKAGE=$(find /tmp/om-visualizer-src -maxdepth 4 -type f -name package.json -not -path '*/node_modules/*' | head -n 1)
+          if [ -z "$PROJECT_PACKAGE" ]; then
+            echo "No package.json found inside ZIP."
+            exit 1
+          fi
+          PROJECT_ROOT=$(dirname "$PROJECT_PACKAGE")
+          echo "Using project root: $PROJECT_ROOT"
+
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+
+          rsync -a "$PROJECT_ROOT"/ ./ \
+            --exclude='.git' \
+            --exclude='.next' \
+            --exclude='node_modules' \
+            --exclude='.vercel' \
+            --exclude='*.zip' \
+            --exclude='tsconfig.tsbuildinfo'
+
+          rm -rf .github/workflows/restructure.yml
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git status --short
+          git commit -m "Clean root Vercel-ready Om Visualizer app" || echo "No changes to commit"
+          git push
