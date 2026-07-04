@@ -51,8 +51,8 @@ function createParticles(count: number, width: number, height: number): Particle
       vy: 0,
       tx: cx,
       ty: cy,
-      alpha: 0.56 + Math.random() * 0.4,
-      size: 0.75 + Math.random() * 1.65,
+      alpha: 0.62 + Math.random() * 0.28,
+      size: 1.05 + Math.random() * 0.22,
       phase: Math.random() * Math.PI * 2,
     };
   });
@@ -71,11 +71,11 @@ function renderParticles(ctx: CanvasRenderingContext2D, particles: Particle[], f
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
   for (const particle of particles) {
-    const energySize = particle.size + features.rms * 9 + features.harmonicRichness * 1.4;
-    ctx.globalAlpha = settled ? Math.min(0.95, particle.alpha + 0.18) : particle.alpha;
-    ctx.fillStyle = features.rms > 0.14 ? 'rgba(255, 232, 174, 0.88)' : 'rgba(196, 185, 255, 0.66)';
+    const sandGrainSize = settled ? particle.size * 1.08 : particle.size;
+    ctx.globalAlpha = settled ? Math.min(0.96, particle.alpha + 0.12) : particle.alpha;
+    ctx.fillStyle = features.rms > 0.14 ? 'rgba(255, 232, 174, 0.86)' : 'rgba(205, 194, 255, 0.68)';
     ctx.beginPath();
-    ctx.arc(particle.x, particle.y, energySize, 0, Math.PI * 2);
+    ctx.arc(particle.x, particle.y, sandGrainSize, 0, Math.PI * 2);
     ctx.fill();
   }
   ctx.restore();
