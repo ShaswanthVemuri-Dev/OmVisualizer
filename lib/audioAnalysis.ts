@@ -133,15 +133,15 @@ export function analyzeAudioFrame(
   const lowMidBalance = clamp01(lowEnergy * 0.82 + midEnergy * 0.48 - highEnergy * 0.34);
   const smoothCentroid = clamp01(1 - spectralCentroid / 5200);
   const rawOmScore = clamp01(
-    sustainedAmplitude * 0.28 +
-      fundamentalPreference * 0.18 +
-      stability * 0.25 +
-      harmonicRichness * 0.15 +
-      lowMidBalance * 0.09 +
+    sustainedAmplitude * 0.24 +
+      fundamentalPreference * 0.16 +
+      stability * 0.31 +
+      harmonicRichness * 0.14 +
+      lowMidBalance * 0.10 +
       smoothCentroid * 0.05,
   );
   const previousScore = previousFrames.length > 1 ? previousFrames[previousFrames.length - 2].omScore : 0;
-  const attack = rawOmScore > previousScore ? 0.17 : 0.08;
+  const attack = rawOmScore > previousScore ? 0.22 : 0.06;
   const omScore = clamp01(previousScore * (1 - attack) + rawOmScore * attack);
 
   provisional.stability = stability;
