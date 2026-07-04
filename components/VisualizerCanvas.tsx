@@ -51,8 +51,8 @@ function createParticles(count: number, width: number, height: number): Particle
       vy: 0,
       tx: cx,
       ty: cy,
-      alpha: 0.62 + Math.random() * 0.28,
-      size: 1.05 + Math.random() * 0.22,
+      alpha: 0.68 + Math.random() * 0.14,
+      size: 1.0 + Math.random() * 0.08,
       phase: Math.random() * Math.PI * 2,
     };
   });
@@ -60,8 +60,8 @@ function createParticles(count: number, width: number, height: number): Particle
 
 function drawBackground(ctx: CanvasRenderingContext2D, width: number, height: number) {
   const gradient = ctx.createRadialGradient(width / 2, height / 2, 20, width / 2, height / 2, Math.max(width, height) * 0.72);
-  gradient.addColorStop(0, 'rgba(60, 34, 85, 0.58)');
-  gradient.addColorStop(0.55, 'rgba(11, 9, 28, 0.92)');
+  gradient.addColorStop(0, 'rgba(42, 28, 62, 0.42)');
+  gradient.addColorStop(0.55, 'rgba(8, 7, 21, 0.96)');
   gradient.addColorStop(1, 'rgba(5, 3, 12, 1)');
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
@@ -69,13 +69,13 @@ function drawBackground(ctx: CanvasRenderingContext2D, width: number, height: nu
 
 function renderParticles(ctx: CanvasRenderingContext2D, particles: Particle[], features: AudioFeatures, settled: boolean) {
   ctx.save();
-  ctx.globalCompositeOperation = 'lighter';
+  ctx.globalCompositeOperation = 'source-over';
   for (const particle of particles) {
-    const sandGrainSize = settled ? particle.size * 1.08 : particle.size;
-    ctx.globalAlpha = settled ? Math.min(0.96, particle.alpha + 0.12) : particle.alpha;
-    ctx.fillStyle = features.rms > 0.14 ? 'rgba(255, 232, 174, 0.86)' : 'rgba(205, 194, 255, 0.68)';
+    const grainSize = particle.size;
+    ctx.globalAlpha = settled ? Math.min(0.9, particle.alpha + 0.06) : particle.alpha;
+    ctx.fillStyle = features.omScore > 0.55 ? 'rgba(246, 235, 205, 0.82)' : 'rgba(220, 212, 255, 0.72)';
     ctx.beginPath();
-    ctx.arc(particle.x, particle.y, sandGrainSize, 0, Math.PI * 2);
+    ctx.arc(particle.x, particle.y, grainSize, 0, Math.PI * 2);
     ctx.fill();
   }
   ctx.restore();
@@ -165,6 +165,7 @@ export const VisualizerCanvas = forwardRef<VisualizerCanvasHandle, VisualizerCan
       const finalSummary = finalSummaryRef.current;
       const activeFeatures = finalSummary ?? liveFeatures;
       const morphProgress = mode.algorithmMode === 'sri-chakra' ? activeFeatures.omScore : 0;
+      const resolvedMorph = mode.algorithmMode === 'sri-chakra' ? Math.min(1, activeFeatures.omScore * 1.28) : 0;
       const settled = Boolean(finalSummary);
       const particles = particlesRef.current;
 
@@ -173,27 +174,33 @@ export const VisualizerCanvas = forwardRef<VisualizerCanvasHandle, VisualizerCan
 
       const cymaticTargets = createCymaticTargets(width, height, particles.length, activeFeatures, time);
       const sriTargets = mode.algorithmMode === 'sri-chakra' ? createSriChakraPoints(width, height, particles.length) : cymaticTargets;
-      const chaos = settled ? 0.08 : 1 - morphProgress;
-      const targetBlend = mode.algorithmMode === 'sri-chakra' ? morphProgress : 0;
+      const chaos = settled ? 0.02 : Math.max(0.03, (1 - resolvedMorph) ** 1.85);
 
       for (let index = 0; index < particles.length; index += 1) {
         const particle = particles[index];
         const cymatic = cymaticTargets[index];
         const sri = sriTargets[index];
         const jitterAngle = particle.phase + time * 0.0011 + index * 0.013;
-        const jitterRadius = chaos * (5 + activeFeatures.rms * 68 + activeFeatures.highEnergy * 22);
-        const tx = cymatic.x * (1 - targetBlend) + sri.x * targetBlend + Math.cos(jitterAngle) * jitterRadius;
-        const ty = cymatic.y * (1 - targetBlend) + sri.y * targetBlend + Math.sin(jitterAngle) * jitterRadius;
-        const attraction = settled ? 0.14 : 0.055 + activeFeatures.stability * 0.045 + morphProgress * 0.07 + activeFeatures.rms * 0.035;
-        particle.vx = (particle.vx + (tx - particle.x) * attraction) * 0.78;
-        particle.vy = (particle.vy + (ty - particle.y) * attraction) * 0.78;
+        const jitterRadius = chaos * (2 + activeFeatures.rms * 20 + activeFeatures.highEnergy * 8);
+        const tx = cymatic.x * (1 - resolvedMorph) + sri.x * resolvedMorph + Math.cos(jitterAngle) * jitterRadius;
+        const ty = cymatic.y * (1 - resolvedMorph) + sri.y * resolvedMorph + Math.sin(jitterAngle) * jitterRadius;
+        const attraction = settled ? 0.22 : 0.07 + activeFeatures.stability * 0.08 + resolvedMorph * 0.14 + activeFeatures.rms * 0.02;
+        particle.vx = (particle.vx + (tx - particle.x) * attraction) * 0.76;
+        particle.vy = (particle.vy + (ty - particle.y) * attraction) * 0.76;
         particle.x += particle.vx;
         particle.y += particle.vy;
         particle.tx = tx;
         particle.ty = ty;
       }
 
-      if (mode.algorithmMode === 'sri-chakra') drawSriChakraGuide(ctx, width, height, settled ? Math.max(0.30, morphProgress * 0.88) : morphProgress * 0.60);
+      if (mode.algorithmMode === 'sri-chakra') {
+        drawSriChakraGuide(
+          ctx,
+          width,
+          height,
+          settled ? Math.max(0.42, morphProgress * 0.92) : Math.max(0.12, morphProgress * 0.68),
+        );
+      }
       renderParticles(ctx, particles, activeFeatures, settled);
 
       if (settled && mode.visualMode === 'final') {
@@ -210,7 +217,6 @@ export const VisualizerCanvas = forwardRef<VisualizerCanvasHandle, VisualizerCan
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
   }, [onFinalVisualChange]);
-
 
   return (
     <div ref={containerRef} className="glow-border relative w-full overflow-hidden rounded-[2rem] border border-white/10 bg-black/30 p-2 sm:p-3" aria-label="Cymatics visualization canvas container">
