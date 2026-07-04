@@ -1,52 +1,97 @@
 # Om Cymatics Visualizer
 
-A production-ready responsive web app that creates cymatics-inspired sacred-geometry visuals from microphone input or an uploaded sound file.
+Om Cymatics Visualizer is a production-ready responsive web app that creates cymatics-inspired sacred-geometry visuals from microphone input. It is designed around two complementary modes:
 
-The primary calibration test case is a clean, stable **Om / Aum** chant. In **Sri Chakra Mode**, a stable Om-like sustained tone progressively morphs the visualization toward a Sri Chakra / Sri Yantra-inspired final geometry.
+- **Cymatics Mode** — a physics-inspired visualization driven by amplitude, frequency, spectral centroid, energy bands, harmonic richness, and resonance-style nodal patterns.
+- **Sri Chakra Mode** — a calibrated symbolic sacred-geometry mode where a clean, stable Om / Aum-like chant progressively resolves the particle field toward a Sri Chakra / Sri Yantra-inspired final geometry.
 
-> Scientific disclaimer: this app is a symbolic, cymatics-inspired, and sacred-geometry visualization. It does **not** claim laboratory proof that Om physically creates Sri Chakra.
+> Scientific disclaimer: Sri Chakra Mode is a calibrated sacred-geometry interpretation, not laboratory proof that Om physically creates Sri Chakra.
 
 ## Features
 
 - Next.js App Router with TypeScript
-- React functional components
-- Tailwind CSS responsive UI
-- Web Audio API microphone capture and analysis
-- Optional audio file upload for final rendering
-- Canvas 2D rendering with `requestAnimationFrame`
-- Device-pixel-ratio-aware crisp canvas rendering
-- Mobile, tablet, laptop, and desktop responsive layouts
-- Live Mode for continuous motion
-- Final Render Mode for a static saved visual after recording/uploading
-- Cymatics Mode using frequency, amplitude, harmonics, and resonance-style nodal patterns
-- Sri Chakra Mode using an Om stability score to morph toward symbolic sacred geometry
-- Programmatic Sri Chakra-inspired geometry: bindu, interlocking triangles, circular rings, petals, and bhupura-inspired square frame
-- Dynamic particle count by viewport size for mobile performance
-- Graceful microphone permission errors
-- PNG download support
+- Tailwind CSS styling
+- Web Audio API microphone analysis
+- Canvas 2D particle renderer
+- Responsive mobile-first layout
+- Live Mode for real-time animated visuals
+- Final Render Mode for recording, analysis, and static final output
+- Programmatic Sri Chakra-inspired geometry with no external image asset
+- Microphone permission error handling
+- PNG download from canvas
+- Audio analysis panel showing amplitude, dominant frequency, spectral centroid, energy bands, harmonic richness, and Om stability score
 - Vercel-ready deployment
 
 ## Tech stack
 
 - Next.js
+- React functional components
 - TypeScript
-- React
 - Tailwind CSS
 - Web Audio API
 - Canvas 2D
-- Vercel
 
-## Algorithm overview
+## Project structure
 
-### Audio analysis
-
-`lib/audioAnalysis.ts` exposes:
-
-```ts
-analyzeAudioFrame(frequencyData, timeDomainData, sampleRate)
+```txt
+app/page.tsx
+app/layout.tsx
+app/globals.css
+components/VisualizerCanvas.tsx
+components/Controls.tsx
+components/AudioStatsPanel.tsx
+components/ExplanationPanel.tsx
+lib/audioAnalysis.ts
+lib/geometry/sriChakra.ts
+lib/geometry/cymatics.ts
+lib/types.ts
 ```
 
-It returns:
+## Local development
+
+```bash
+npm install
+npm run dev
+```
+
+Open the local URL shown by Next.js, usually `http://localhost:3000`.
+
+## Production build
+
+```bash
+npm run build
+npm start
+```
+
+## Vercel deployment
+
+```bash
+npm install
+npm run build
+vercel
+```
+
+Microphone access requires a secure context in production. Vercel provides HTTPS automatically, so microphone permission should work after deployment.
+
+## GitHub setup
+
+This repository was initialized and committed locally. If GitHub CLI is authenticated on your machine, run:
+
+```bash
+gh repo create om-cymatics-visualizer --public --source=. --remote=origin --push
+```
+
+If GitHub CLI is not installed or not authenticated, create a public repository named `om-cymatics-visualizer` on GitHub, then run:
+
+```bash
+git remote add origin https://github.com/<your-username>/om-cymatics-visualizer.git
+git branch -M main
+git push -u origin main
+```
+
+## Algorithm notes
+
+`analyzeAudioFrame(frequencyData, timeDomainData, sampleRate)` returns:
 
 ```ts
 {
@@ -62,147 +107,50 @@ It returns:
 }
 ```
 
-The app uses an `AnalyserNode` to read frequency-domain and time-domain frames. It computes RMS amplitude, dominant frequency, spectral centroid, band energy, harmonic richness, rolling frequency/envelope stability, and a smoothed Om stability score.
+The Om stability score is approximate and favors:
 
-### Cymatics Mode
-
-Cymatics Mode is not hardcoded to Sri Chakra. It uses amplitude, frequency, centroid, band energy, and harmonics to drive:
-
-- radial waves
-- nodal rings
-- symmetry count
-- particle clustering
-- harmonic line structures
-
-### Sri Chakra Mode
-
-Sri Chakra Mode is calibrated and symbolic. It favors:
-
-- sustained amplitude
-- lower/mid vocal dominant frequency
-- smooth pitch contour
-- stable envelope
+- sustained amplitude instead of sudden noise
+- lower-to-mid dominant frequency ranges
+- stable dominant frequency over a rolling buffer
+- smooth amplitude envelope
 - harmonic richness
-- longer vowel-like sustained tone
+- low/mid energy balance over high-frequency noise
 
-A clean, stable Om-like input raises `omScore`. Higher `omScore` increases `morphProgress`, moving particles from chaotic cymatic targets toward Sri Chakra-inspired geometry targets.
+In Sri Chakra Mode, this score is used as morph progress:
 
-Random noise should remain more chaotic and should not fully resolve.
+- `0` = chaotic cymatics-inspired particles
+- `1` = resolved Sri Chakra-inspired symbolic geometry
 
-## Project structure
-
-```txt
-app/
-  globals.css
-  layout.tsx
-  page.tsx
-components/
-  AudioStatsPanel.tsx
-  Controls.tsx
-  ExplanationPanel.tsx
-  VisualizerApp.tsx
-  VisualizerCanvas.tsx
-lib/
-  audioAnalysis.ts
-  types.ts
-  geometry/
-    cymatics.ts
-    sriChakra.ts
-README.md
-package.json
-tailwind.config.ts
-postcss.config.mjs
-next.config.mjs
-tsconfig.json
-```
-
-## Local setup
-
-```bash
-npm install
-npm run dev
-```
-
-Open:
-
-```bash
-http://localhost:3000
-```
-
-## Build
-
-```bash
-npm run build
-```
-
-## Deployment on Vercel
-
-```bash
-npm install
-npm run build
-vercel
-```
-
-Microphone access requires a secure context. `localhost` works in development, and Vercel provides HTTPS in production.
-
-## GitHub setup
-
-If the repository was not created automatically, create and push it manually:
-
-```bash
-git init
-git add .
-git commit -m "Initial Om Cymatics Visualizer app"
-git branch -M main
-gh repo create om-cymatics-visualizer --public --source=. --remote=origin --push
-```
-
-If `gh` is not authenticated:
-
-```bash
-gh auth login
-gh repo create om-cymatics-visualizer --public --source=. --remote=origin --push
-```
-
-Or create a public repository named `om-cymatics-visualizer` in GitHub, then run:
-
-```bash
-git remote add origin https://github.com/<your-username>/om-cymatics-visualizer.git
-git push -u origin main
-```
+Final Render Mode aggregates recorded audio features and renders a deterministic final visual from the summary.
 
 ## Manual test checklist
 
-- App loads without runtime errors.
-- Layout has no horizontal scrolling on mobile.
-- Canvas stays centered and scales on mobile, tablet, and desktop.
-- Desktop uses a two-column visualizer layout.
-- Speak button opens the browser microphone permission prompt.
-- Denying microphone permission shows a helpful error and does not crash the app.
-- Live Mode reacts to voice input in real time.
-- Stop button releases microphone tracks.
-- Final Render Mode records, aggregates audio features, and holds a final visual.
-- Clear Visual resets the canvas and stats.
-- Download Image exports a PNG.
-- Cymatics Mode produces organic nodal/radial patterns and is not hardcoded to Sri Chakra.
-- Sri Chakra Mode stays chaotic for random noise.
-- Sri Chakra Mode converges toward a Sri Chakra-inspired result during a clean, stable Om-like chant.
-- Uploaded audio produces a final visual.
-- `npm run build` completes successfully.
+- [ ] App loads without runtime errors.
+- [ ] Layout has no horizontal scrolling on mobile.
+- [ ] Canvas stays centered and responsive on iPhone, Android, iPad/tablet, laptop, and desktop widths.
+- [ ] Speak button triggers the browser microphone permission prompt.
+- [ ] Denying microphone permission shows the correct helpful error and does not crash.
+- [ ] Live Mode renders moving visuals reacting to sound.
+- [ ] Cymatics Mode does not hardcode Sri Chakra geometry.
+- [ ] Sri Chakra Mode remains chaotic for random noise.
+- [ ] Sri Chakra Mode converges toward Sri Chakra-inspired geometry for a stable Om-like chant.
+- [ ] Final Render Mode records, stops, aggregates features, and holds the final visual.
+- [ ] Clear Visual resets the canvas and analysis panel.
+- [ ] Download Image exports a PNG.
+- [ ] Repeated start/stop cycles do not leave microphone tracks active.
+- [ ] `npm run build` completes successfully.
 
 ## Known limitations
 
-- The Om detection is heuristic, not a medical, acoustic, or religious authority.
-- Sri Chakra geometry is visually recognizable but not a mathematically exact traditional Sri Yantra construction.
-- Browser microphone permission behavior differs by platform, especially mobile Safari.
-- Audio upload analysis uses browser-side decoding and sampled feature estimation rather than full offline spectrogram analysis.
-- No audio is uploaded to a server; all analysis is browser-side.
+- The Om detection is heuristic, not medical, phonetic, or laboratory-grade acoustic validation.
+- The Sri Chakra geometry is visually recognizable and modular, but it is not a mathematically exact traditional Sri Yantra construction.
+- Browser microphone behavior differs across platforms, especially mobile Safari.
+- Local development microphone access may be restricted unless served from `localhost` or HTTPS.
 
 ## Future improvements
 
-- Replace the Sri Chakra approximation with an exact traditional geometric construction module.
-- Add WebGL rendering for higher particle counts.
-- Add optional pitch tracking with autocorrelation/YIN.
-- Add calibration profiles for different voices and microphone environments.
-- Add shareable visual presets.
-- Add automated browser tests with Playwright.
+- Add optional audio file upload analysis.
+- Add a more exact Sri Yantra construction module.
+- Add WebGL renderer for higher particle counts.
+- Add automated Playwright tests for UI flows.
+- Add calibration presets for different voice ranges.
