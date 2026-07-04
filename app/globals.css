@@ -4,6 +4,17 @@
 
 :root {
   color-scheme: dark;
+  --bg: #05020b;
+  --panel: rgba(12, 10, 26, 0.78);
+  --panel-strong: rgba(18, 14, 34, 0.92);
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 220, 160, 0.22);
+  --text: #fff7ed;
+  --muted: #c7bfd8;
+  --gold: #ffe3a4;
+  --pink: #f5c2ff;
+  --violet: #b999ff;
+  --cyan: #9ae6ff;
 }
 
 * {
@@ -12,40 +23,473 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--bg);
 }
 
 body {
   min-height: 100vh;
   margin: 0;
+  overflow-x: hidden;
   background:
-    radial-gradient(circle at 15% 10%, rgba(190, 143, 255, 0.16), transparent 30rem),
-    radial-gradient(circle at 85% 20%, rgba(255, 204, 128, 0.12), transparent 28rem),
-    linear-gradient(135deg, #05020b 0%, #0b0920 45%, #130914 100%);
-  color: #f8f1ff;
+    radial-gradient(circle at 18% 8%, rgba(190, 143, 255, 0.22), transparent 22rem),
+    radial-gradient(circle at 84% 18%, rgba(255, 204, 128, 0.16), transparent 26rem),
+    radial-gradient(circle at 50% 90%, rgba(112, 42, 185, 0.12), transparent 32rem),
+    linear-gradient(135deg, #05020b 0%, #09081d 43%, #140916 100%);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 button, input, select, textarea {
   font: inherit;
 }
 
+button {
+  cursor: pointer;
+}
+
 canvas {
   touch-action: none;
 }
 
+main {
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+main > header {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0 20px;
+}
+
+main > header a:first-child {
+  letter-spacing: 0.22em;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+main > header a:last-child {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 10px 14px;
+  color: #efe9ff;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
+  font-size: 0.9rem;
+}
+
+#top {
+  width: min(1180px, 100%);
+  margin: 0 auto 26px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  align-items: center;
+  gap: 34px;
+  min-height: 68vh;
+  padding: 42px 0 28px;
+}
+
+#top > div:first-child > p:first-child {
+  display: inline-flex;
+  width: fit-content;
+  margin: 0 0 18px;
+  padding: 10px 15px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: rgba(255, 227, 164, 0.09);
+  color: var(--gold);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0;
+  max-width: 780px;
+  color: white;
+  font-size: clamp(2.55rem, 8vw, 5.8rem);
+  line-height: 0.94;
+  letter-spacing: -0.075em;
+  font-weight: 950;
+  text-wrap: balance;
+}
+
+#top > div:first-child > p:nth-of-type(2) {
+  max-width: 680px;
+  margin: 24px 0 0;
+  color: #e9e1f8;
+  font-size: clamp(1.12rem, 2.8vw, 1.45rem);
+  line-height: 1.55;
+}
+
+#top > div:first-child > p:nth-of-type(3) {
+  max-width: 680px;
+  margin: 18px 0 0;
+  padding: 16px;
+  border: 1px solid rgba(255, 214, 140, 0.22);
+  border-radius: 22px;
+  color: #ffeccb;
+  background: rgba(0, 0, 0, 0.22);
+  line-height: 1.55;
+}
+
+#top button,
+section[aria-labelledby="controls-heading"] button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 18px;
+  padding: 13px 18px;
+  color: #130f1d;
+  background: linear-gradient(135deg, var(--gold), var(--pink));
+  font-weight: 850;
+  box-shadow: 0 16px 38px rgba(241, 180, 255, 0.16);
+}
+
+#top button {
+  margin-top: 26px;
+  font-size: 1rem;
+}
+
+#top > div:last-child,
 .glass-panel {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(10, 8, 22, 0.72);
-  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background: var(--panel);
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.38);
   backdrop-filter: blur(18px);
 }
 
+#top > div:last-child {
+  padding: 18px;
+  box-shadow: 0 0 0 1px rgba(250, 214, 145, 0.18), 0 0 70px rgba(198, 138, 255, 0.2), inset 0 0 80px rgba(255, 229, 160, 0.035);
+}
+
+#top > div:last-child > div {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  background: radial-gradient(circle, rgba(255, 221, 155, 0.24), rgba(121, 77, 201, 0.15) 38%, rgba(0,0,0,0.22) 72%);
+  padding: 32px;
+}
+
+#top > div:last-child > div > div {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 232, 180, 0.22);
+  border-radius: 999px;
+}
+
+#top > div:last-child > div > div > div {
+  width: 66%;
+  height: 66%;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(244, 194, 255, 0.25);
+  border-radius: 999px;
+}
+
+#top > div:last-child > div > div > div > div {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--gold);
+  box-shadow: 0 0 42px rgba(255, 230, 170, 0.95);
+}
+
+#visualizer {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(330px, 0.85fr);
+  gap: 22px;
+  align-items: start;
+  padding-bottom: 28px;
+}
+
+#visualizer > div:first-child {
+  min-width: 0;
+}
+
+#visualizer > div:last-child {
+  display: grid;
+  gap: 18px;
+}
+
 .glow-border {
-  box-shadow:
-    0 0 0 1px rgba(250, 214, 145, 0.18),
-    0 0 44px rgba(198, 138, 255, 0.16),
-    inset 0 0 80px rgba(255, 229, 160, 0.035);
+  box-shadow: 0 0 0 1px rgba(250, 214, 145, 0.18), 0 0 52px rgba(198, 138, 255, 0.22), inset 0 0 80px rgba(255, 229, 160, 0.04);
+}
+
+[aria-label="Cymatics visualization canvas container"],
+[aria-label="Audio-reactive visualization canvas container"] {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.32);
+  padding: 10px;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  border-radius: 22px;
+}
+
+[aria-label="Cymatics visualization canvas container"] > div,
+[aria-label="Audio-reactive visualization canvas container"] > div {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(0,0,0,0.36);
+  padding: 7px 12px;
+  color: #ede7ff;
+  font-size: 0.78rem;
+  backdrop-filter: blur(12px);
+}
+
+section[aria-labelledby="controls-heading"],
+section[aria-labelledby="stats-heading"],
+section[aria-labelledby="explanation-heading"],
+section[aria-labelledby="principles-heading"] {
+  padding: 18px;
+  border-radius: 26px;
+}
+
+section[aria-labelledby="controls-heading"] h2,
+section[aria-labelledby="stats-heading"] h2,
+section[aria-labelledby="explanation-heading"] h2,
+section[aria-labelledby="principles-heading"] h2 {
+  margin: 0;
+  color: white;
+  font-size: 1.12rem;
+}
+
+section[aria-labelledby="controls-heading"] p,
+section[aria-labelledby="stats-heading"] p,
+section[aria-labelledby="explanation-heading"] p,
+section[aria-labelledby="principles-heading"] li {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+section[aria-labelledby="controls-heading"] > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+section[aria-labelledby="controls-heading"] > div:last-child {
+  display: grid;
+  gap: 18px;
+}
+
+section[aria-labelledby="controls-heading"] > div:last-child > div:nth-child(1) > p,
+section[aria-labelledby="controls-heading"] > div:last-child > div:nth-child(2) > p {
+  margin: 0 0 8px;
+  color: #9f97b2;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+section[aria-labelledby="controls-heading"] > div:last-child > div:nth-child(1) > div,
+section[aria-labelledby="controls-heading"] > div:last-child > div:nth-child(2) > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  border-radius: 18px;
+  background: rgba(0,0,0,0.25);
+  padding: 5px;
+}
+
+section[aria-labelledby="controls-heading"] > div:last-child > div:nth-child(1) button,
+section[aria-labelledby="controls-heading"] > div:last-child > div:nth-child(2) button {
+  color: #efe9ff;
+  background: rgba(255,255,255,0.07);
+  box-shadow: none;
+  font-size: 0.92rem;
+}
+
+section[aria-labelledby="controls-heading"] button[aria-pressed="true"] {
+  color: #120e19 !important;
+  background: var(--gold) !important;
+}
+
+section[aria-labelledby="controls-heading"] > div:last-child > div:nth-child(3) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+section[aria-labelledby="controls-heading"] > div:last-child > div:nth-child(3) button:last-child,
+section[aria-labelledby="controls-heading"] > div:last-child > button {
+  color: white;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.07);
+  box-shadow: none;
+}
+
+section[aria-labelledby="stats-heading"] > div:nth-child(2) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+section[aria-labelledby="stats-heading"] > div:nth-child(2) > div {
+  border-radius: 18px;
+  background: rgba(255,255,255,0.06);
+  padding: 12px;
+}
+
+section[aria-labelledby="stats-heading"] > div:nth-child(3) {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+section[aria-labelledby="stats-heading"] > div:nth-child(3) > div > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: #d9d3e8;
+  font-size: 0.78rem;
+}
+
+section[aria-labelledby="stats-heading"] > div:nth-child(3) > div > div:last-child {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
 }
 
 .meter-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--pink), var(--gold));
   transition: width 160ms ease-out;
+}
+
+main > section:nth-of-type(3) {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  padding-bottom: 42px;
+}
+
+main footer {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  border-top: 1px solid var(--line);
+  padding: 22px 0 8px;
+  color: #a9a1b9;
+  font-size: 0.88rem;
+}
+
+@media (max-width: 900px) {
+  main {
+    padding: 14px;
+  }
+
+  main > header {
+    padding-bottom: 14px;
+  }
+
+  main > header a:first-child {
+    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+  }
+
+  main > header a:last-child {
+    padding: 8px 10px;
+    font-size: 0.82rem;
+  }
+
+  #top {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    gap: 22px;
+    padding: 24px 0 18px;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 14vw, 4.2rem);
+    letter-spacing: -0.06em;
+  }
+
+  #visualizer,
+  main > section:nth-of-type(3) {
+    grid-template-columns: 1fr;
+  }
+
+  section[aria-labelledby="controls-heading"] > div:last-child > div:nth-child(3) {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  main {
+    padding: 10px;
+  }
+
+  main > header {
+    gap: 8px;
+  }
+
+  main > header a:first-child {
+    max-width: 48vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #top > div:last-child {
+    display: none;
+  }
+
+  #top > div:first-child > p:nth-of-type(2),
+  #top > div:first-child > p:nth-of-type(3) {
+    font-size: 1rem;
+  }
+
+  [aria-label="Cymatics visualization canvas container"],
+  [aria-label="Audio-reactive visualization canvas container"] {
+    padding: 6px;
+    border-radius: 22px;
+  }
+
+  canvas {
+    border-radius: 18px;
+  }
+
+  section[aria-labelledby="controls-heading"],
+  section[aria-labelledby="stats-heading"],
+  section[aria-labelledby="explanation-heading"],
+  section[aria-labelledby="principles-heading"] {
+    padding: 14px;
+    border-radius: 22px;
+  }
 }
