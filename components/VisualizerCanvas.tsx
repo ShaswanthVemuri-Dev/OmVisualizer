@@ -32,9 +32,9 @@ const EMPTY_FEATURES: AudioFeatures = {
 };
 
 function getParticleCount(width: number): number {
-  if (width < 520) return 720;
-  if (width < 920) return 1200;
-  return 1900;
+  if (width < 520) return 900;
+  if (width < 920) return 1400;
+  return 2400;
 }
 
 function createParticles(count: number, width: number, height: number): Particle[] {
@@ -71,9 +71,9 @@ function renderParticles(ctx: CanvasRenderingContext2D, particles: Particle[], f
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
   for (const particle of particles) {
-    const energySize = particle.size + features.rms * 6;
+    const energySize = particle.size + features.rms * 9 + features.harmonicRichness * 1.4;
     ctx.globalAlpha = settled ? Math.min(0.95, particle.alpha + 0.18) : particle.alpha;
-    ctx.fillStyle = 'rgba(255, 226, 166, 0.74)';
+    ctx.fillStyle = features.rms > 0.14 ? 'rgba(255, 232, 174, 0.88)' : 'rgba(196, 185, 255, 0.66)';
     ctx.beginPath();
     ctx.arc(particle.x, particle.y, energySize, 0, Math.PI * 2);
     ctx.fill();
@@ -181,10 +181,10 @@ export const VisualizerCanvas = forwardRef<VisualizerCanvasHandle, VisualizerCan
         const cymatic = cymaticTargets[index];
         const sri = sriTargets[index];
         const jitterAngle = particle.phase + time * 0.0011 + index * 0.013;
-        const jitterRadius = chaos * (5 + activeFeatures.rms * 42);
+        const jitterRadius = chaos * (5 + activeFeatures.rms * 68 + activeFeatures.highEnergy * 22);
         const tx = cymatic.x * (1 - targetBlend) + sri.x * targetBlend + Math.cos(jitterAngle) * jitterRadius;
         const ty = cymatic.y * (1 - targetBlend) + sri.y * targetBlend + Math.sin(jitterAngle) * jitterRadius;
-        const attraction = settled ? 0.12 : 0.045 + activeFeatures.stability * 0.04 + morphProgress * 0.06;
+        const attraction = settled ? 0.14 : 0.055 + activeFeatures.stability * 0.045 + morphProgress * 0.07 + activeFeatures.rms * 0.035;
         particle.vx = (particle.vx + (tx - particle.x) * attraction) * 0.78;
         particle.vy = (particle.vy + (ty - particle.y) * attraction) * 0.78;
         particle.x += particle.vx;
@@ -193,7 +193,7 @@ export const VisualizerCanvas = forwardRef<VisualizerCanvasHandle, VisualizerCan
         particle.ty = ty;
       }
 
-      if (mode.algorithmMode === 'sri-chakra') drawSriChakraGuide(ctx, width, height, settled ? Math.max(0.22, morphProgress * 0.72) : morphProgress * 0.46);
+      if (mode.algorithmMode === 'sri-chakra') drawSriChakraGuide(ctx, width, height, settled ? Math.max(0.30, morphProgress * 0.88) : morphProgress * 0.60);
       renderParticles(ctx, particles, activeFeatures, settled);
 
       if (settled && mode.visualMode === 'final') {
@@ -216,7 +216,7 @@ export const VisualizerCanvas = forwardRef<VisualizerCanvasHandle, VisualizerCan
     <div ref={containerRef} className="glow-border relative w-full overflow-hidden rounded-[2rem] border border-white/10 bg-black/30 p-2 sm:p-3" aria-label="Cymatics visualization canvas container">
       <canvas ref={canvasRef} className="block w-full rounded-[1.55rem]" role="img" aria-label="Real-time cymatics-inspired sacred geometry visualization" />
       <div className="pointer-events-none absolute left-5 top-5 rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs text-slate-200 backdrop-blur-md">
-        {algorithmMode === 'sri-chakra' ? 'Sri Chakra symbolic mode' : 'Cymatics physics-inspired mode'}
+        {isRecording ? 'Listening to live audio' : algorithmMode === 'sri-chakra' ? 'Sri Chakra Mode' : 'Cymatics Mode'}
       </div>
     </div>
   );

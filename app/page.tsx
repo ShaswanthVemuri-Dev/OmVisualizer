@@ -188,10 +188,10 @@ export default function Home() {
 
       <section id="top" className={`mx-auto grid max-w-7xl items-center gap-8 py-10 sm:py-14 lg:grid-cols-[1.05fr_0.95fr] ${hasStarted ? 'lg:py-8' : 'min-h-[72vh]'}`}>
         <div>
-          <p className="mb-4 inline-flex rounded-full border border-amber-200/20 bg-amber-200/8 px-4 py-2 text-sm text-amber-100">Cymatics-inspired sacred geometry</p>
+          <p className="mb-4 inline-flex rounded-full border border-amber-200/20 bg-amber-200/8 px-4 py-2 text-sm text-amber-100">Live audio sacred geometry</p>
           <h1 className="max-w-4xl text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-7xl">Om Cymatics Visualizer</h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">Speak, chant, or upload sound to generate cymatics-inspired sacred geometry.</p>
-          <p className="mt-4 max-w-2xl rounded-2xl border border-amber-200/20 bg-black/20 p-4 text-sm leading-6 text-amber-50">Sri Chakra Mode is a calibrated sacred-geometry interpretation, not a laboratory proof.</p>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">Speak or chant into the microphone and watch the visual field react in real time.</p>
+          <p className="mt-4 max-w-2xl rounded-2xl border border-amber-200/20 bg-black/20 p-4 text-sm leading-6 text-amber-50">Sri Chakra Mode follows a stable Om-like chant and resolves the particles into a Sri Chakra-inspired form.</p>
           <button
             type="button"
             onClick={() => {
@@ -247,18 +247,18 @@ export default function Home() {
       <section className="mx-auto grid max-w-7xl gap-5 pb-12 lg:grid-cols-2">
         <ExplanationPanel />
         <section className="glass-panel rounded-3xl p-4 sm:p-5" aria-labelledby="principles-heading">
-          <h2 id="principles-heading" className="text-lg font-semibold text-white">Design principles</h2>
+          <h2 id="principles-heading" className="text-lg font-semibold text-white">Signal engine</h2>
           <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
-            <li>Audio analysis and rendering run client-side through the Web Audio API and Canvas 2D.</li>
-            <li>Final Render Mode aggregates audio features and keeps a deterministic visual on the canvas.</li>
-            <li>Particle counts are reduced on smaller screens to keep mobile performance reasonable.</li>
+            <li>The microphone signal directly drives the canvas through amplitude, frequency, harmonics, and energy bands.</li>
+            <li>Final Render Mode captures the chant profile and holds the completed pattern on screen.</li>
+            <li>Particle density scales automatically across phones, tablets, and desktops.</li>
             <li>PNG export captures the current canvas state for saving or sharing.</li>
           </ul>
         </section>
       </section>
 
       <footer className="mx-auto max-w-7xl border-t border-white/10 py-6 text-sm text-slate-400">
-        <p>Om Cymatics Visualizer — symbolic cymatics-inspired visualization. Microphone access requires HTTPS in production.</p>
+        <p>Om Cymatics Visualizer — live browser-based sound geometry. Microphone access runs securely over HTTPS.</p>
       </footer>
     </main>
   );
