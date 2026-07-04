@@ -42,39 +42,39 @@ export function drawCymaticField(ctx: CanvasRenderingContext2D, width: number, h
   const spokes = Math.max(8, Math.min(32, Math.round(8 + features.harmonicRichness * 14 + features.lowEnergy * 10)));
 
   ctx.save();
-  ctx.globalCompositeOperation = 'lighter';
-  ctx.lineWidth = Math.max(0.75, Math.min(width, height) * 0.0012 + intensity * 1.2);
-  ctx.shadowColor = 'rgba(255, 205, 135, 0.42)';
-  ctx.shadowBlur = 12 + intensity * 28;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.lineWidth = Math.max(0.6, Math.min(width, height) * 0.001 + intensity * 0.5);
+  ctx.shadowColor = 'rgba(255, 205, 135, 0.12)';
+  ctx.shadowBlur = 3 + intensity * 6;
 
   for (let ring = 1; ring <= rings; ring += 1) {
-    const wobble = Math.sin(time * 0.0022 + ring * 1.9) * intensity * 26;
-    const alpha = 0.08 + intensity * 0.22 + ring / rings * 0.04;
+    const wobble = Math.sin(time * 0.0022 + ring * 1.9) * intensity * 18;
+    const alpha = 0.04 + intensity * 0.09 + ring / rings * 0.02;
     ctx.strokeStyle = `rgba(255, 219, 157, ${alpha})`;
     ctx.beginPath();
     ctx.arc(cx, cy, base * ring + wobble, 0, TAU);
     ctx.stroke();
   }
 
-  ctx.strokeStyle = `rgba(174, 226, 255, ${0.08 + intensity * 0.28})`;
+  ctx.strokeStyle = `rgba(174, 226, 255, ${0.04 + intensity * 0.10})`;
   for (let spoke = 0; spoke < spokes; spoke += 1) {
     const angle = (spoke / spokes) * TAU + time * 0.00035;
     const inner = base * (1.2 + features.lowEnergy * 2);
-    const outer = Math.min(width, height) * (0.28 + intensity * 0.17 + 0.06 * Math.sin(time * 0.002 + spoke));
+    const outer = Math.min(width, height) * (0.28 + intensity * 0.12 + 0.04 * Math.sin(time * 0.002 + spoke));
     ctx.beginPath();
     ctx.moveTo(cx + Math.cos(angle) * inner, cy + Math.sin(angle) * inner);
     ctx.lineTo(cx + Math.cos(angle) * outer, cy + Math.sin(angle) * outer);
     ctx.stroke();
   }
 
-  const pulse = Math.min(width, height) * (0.035 + intensity * 0.07);
-  const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, pulse * 3.8);
-  gradient.addColorStop(0, `rgba(255, 237, 189, ${0.22 + intensity * 0.36})`);
-  gradient.addColorStop(0.48, `rgba(216, 143, 255, ${0.12 + intensity * 0.24})`);
+  const pulse = Math.min(width, height) * (0.02 + intensity * 0.025);
+  const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, pulse * 2.2);
+  gradient.addColorStop(0, `rgba(255, 237, 189, ${0.08 + intensity * 0.12})`);
+  gradient.addColorStop(0.55, `rgba(216, 143, 255, ${0.04 + intensity * 0.06})`);
   gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
   ctx.fillStyle = gradient;
   ctx.beginPath();
-  ctx.arc(cx, cy, pulse * 3.8, 0, TAU);
+  ctx.arc(cx, cy, pulse * 2.2, 0, TAU);
   ctx.fill();
 
   ctx.restore();
